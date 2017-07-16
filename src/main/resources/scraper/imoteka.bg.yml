@@ -1,0 +1,8 @@
+box: .property_holder
+type: h3 > a.nodecoration > strong
+neighbourhood: h3 > a.nodecoration > span
+price: .price > a
+description: div.description > a
+currency:
+size:
+url: .property_image > a
