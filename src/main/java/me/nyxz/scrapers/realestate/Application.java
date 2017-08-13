@@ -1,5 +1,7 @@
 package me.nyxz.scrapers.realestate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import me.nyxz.scrapers.realestate.dto.ScraperConfig;
 import me.nyxz.scrapers.realestate.service.Scraper;
 import me.nyxz.scrapers.realestate.service.ScraperConfigService;
@@ -43,4 +45,16 @@ public class Application {
         return config;
     }
 
+
+    @Bean(name = BeanName.YAML_MAPPER)
+    public ObjectMapper yamlMapper() {
+        return new ObjectMapper(new YAMLFactory());
+    }
+
+    public final class BeanName {
+        private BeanName() {
+        }
+
+        public static final String YAML_MAPPER = "yamlMapper";
+    }
 }
