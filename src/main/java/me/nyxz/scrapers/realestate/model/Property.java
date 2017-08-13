@@ -25,7 +25,7 @@ public class Property {
     private String neighbourhood;
 
     @Column(name = "price")
-    private int price;
+    private Long price;
 
     @Column(name = "price_txt")
     private String priceText;
@@ -66,11 +66,11 @@ public class Property {
         return this;
     }
 
-    public int getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public Property setPrice(int price) {
+    public Property setPrice(Long price) {
         this.price = price;
         return this;
     }
@@ -113,7 +113,14 @@ public class Property {
 
     @Override
     public String toString() {
-        return String.format("%-30s | %-20s | %-8d%s | %-24s | %s | %s", getType(), getNeighbourhood()
-                , getPrice(), CURRENCY, getPriceText(), getDescription(), getUrl());
+        return String.format("%-30s | %-16s | %-20s | %-8d%s | %-24s | %s | %s",
+                getType(),
+                getSize(),
+                getNeighbourhood(),
+                getPrice(),
+                CURRENCY,
+                getPriceText(),
+                getUrl(),
+                getDescription());
     }
 }

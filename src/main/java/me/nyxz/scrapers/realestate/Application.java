@@ -32,7 +32,7 @@ public class Application {
             }
             String queryUrl = args[0];
             ScraperConfig config = configService.getConfigByQuery(queryUrl);
-            scraper.printProperty(config);
+            scraper.run(config);
         };
     }
 

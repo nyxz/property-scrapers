@@ -1,4 +1,5 @@
 box: .property_holder
+pageQueryParam: page
 listSelectorConfig:
   type: h3 > a.nodecoration > strong
   neighbourhood: h3 > a.nodecoration > span
@@ -9,3 +10,9 @@ listSelectorConfig:
   url: .property_image > a
 selectorConfig:
   type:
+  neighbourhood:
+  price:
+  description:
+  currency:
+  size: .estate-description > span
+  url:

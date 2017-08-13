@@ -3,9 +3,17 @@ package me.nyxz.scrapers.realestate.dto;
 public class PropertyAssetsSelector {
 
     private String box;
+    private String pageQueryParam;
     private SelectorConfig listSelectorConfig;
     private SelectorConfig selectorConfig;
 
+    public String getPageQueryParam() {
+        return pageQueryParam;
+    }
+
+    public void setPageQueryParam(String pageQueryParam) {
+        this.pageQueryParam = pageQueryParam;
+    }
 
     public String getBox() {
         return box;
