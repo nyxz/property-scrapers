@@ -17,7 +17,7 @@ public class ScraperConfigService {
         final String domainName = UrlUtil.getDomainName(queryUrl);
         final Optional<Provider> maybeProvider = Provider.forDomain(domainName);
         final Provider provider = maybeProvider.orElseThrow(
-                () -> new IllegalArgumentException("Unknown provider " + domainName));
+                () -> new IllegalStateException("Unknown provider " + domainName));
         final SelectorConfig selectorConfig =
                 SelectorConfigUtil.readForProvider(provider, getClass());
         return new ScraperConfig(queryUrl, selectorConfig);
