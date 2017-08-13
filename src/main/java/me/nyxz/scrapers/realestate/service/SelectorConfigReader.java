@@ -21,15 +21,18 @@ public class SelectorConfigReader {
     @Qualifier(Application.BeanName.YAML_MAPPER)
     private ObjectMapper yamlMapper;
 
-    public SelectorConfig readForProvider(Provider provider, Class<?> clazz) {
+    public SelectorConfig readForProvider(Provider provider) {
         final String configFilename = provider.getConfigFilename();
-        try (InputStream resourceAsStream = clazz.getClassLoader()
-                .getResourceAsStream(configFilename)) {
+        try (InputStream resourceAsStream = load(configFilename)) {
             return yamlMapper.readValue(resourceAsStream, SelectorConfig.class);
         } catch (Exception e) {
             final String message = "Couldn't read field path configuration.";
             LOG.error(message, e);
             throw new RuntimeException(message);
         }
+    }
+
+    private InputStream load(String configFilename) {
+        return getClass().getClassLoader().getResourceAsStream(configFilename);
     }
 }
