@@ -1,7 +1,7 @@
 package me.nyxz.scrapers.realestate.dto;
 
 public class SelectorConfig {
-    private String box;
+
     private String type;
     private String neighbourhood;
     private String price;
@@ -11,15 +11,6 @@ public class SelectorConfig {
     private String url;
 
     private SelectorConfig() {
-    }
-
-    public String getBox() {
-        return box;
-    }
-
-    public SelectorConfig setBox(String box) {
-        this.box = box;
-        return this;
     }
 
     public static SelectorConfig init() {

@@ -3,18 +3,18 @@ package me.nyxz.scrapers.realestate.dto;
 public class ScraperConfig {
 
     private final String query;
-    private final SelectorConfig selectorConfig;
+    private final PropertyAssetsSelector assetsSelector;
 
-    public ScraperConfig(String query, SelectorConfig selectorConfig) {
+    public ScraperConfig(String query, PropertyAssetsSelector assetsSelector) {
         this.query = query;
-        this.selectorConfig = selectorConfig;
+        this.assetsSelector = assetsSelector;
     }
 
     public String getQuery() {
         return query;
     }
 
-    public SelectorConfig getSelectorConfig() {
-        return selectorConfig;
+    public PropertyAssetsSelector getAssetsSelector() {
+        return assetsSelector;
     }
 }
