@@ -6,13 +6,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Optional;
 
 @Entity
 @Table(name = "property", schema = "realestate")
 public class Property {
 
     public static final String CURRENCY = "EUR";
+    public static final int DESCRIPTION_LEN = 10_000;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,7 +36,7 @@ public class Property {
     @Column(name = "price_txt")
     private String priceText;
 
-    @Column(name = "description", length = 10_000)
+    @Column(name = "description", length = DESCRIPTION_LEN)
     @Lob
     private String description;
 
@@ -39,6 +45,26 @@ public class Property {
 
     @Column(name = "url", length = 2_083)
     private String url;
+
+    @Column(name = "date_created")
+    private Date dateCreated;
+
+    @Column(name = "date_modified")
+    private Date dateModified;
+
+    @PrePersist
+    public void prePersist() {
+        final Date now = new Date();
+        dateCreated = now;
+        dateModified = now;
+        ensureDescriptionLenght();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        dateModified = new Date();
+        ensureDescriptionLenght();
+    }
 
     public long getId() {
         return id;
@@ -111,9 +137,25 @@ public class Property {
         return this;
     }
 
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public Date getDateModified() {
+        return dateModified;
+    }
+
+    public void setDateModified(Date dateModified) {
+        this.dateModified = dateModified;
+    }
+
     @Override
     public String toString() {
-        return String.format("%-30s | %-16s | %-20s | %-8d%s | %-24s | %s | %s",
+        return String.format("%-30s | %-16s | %-20s | %-8d%s | %-24s | %s | %s | %s | %s ",
                 getType(),
                 getSize(),
                 getNeighbourhood(),
@@ -121,6 +163,21 @@ public class Property {
                 CURRENCY,
                 getPriceText(),
                 getUrl(),
-                getDescription());
+                getDescription(),
+                toIsoDateString(getDateCreated()),
+                toIsoDateString(getDateModified()));
+    }
+
+    private String toIsoDateString(Date date) {
+        return Optional.ofNullable(date)
+                .map(Date::toInstant)
+                .map(DateTimeFormatter.ISO_DATE::format)
+                .orElse("<not-set>");
+    }
+
+    private void ensureDescriptionLenght() {
+        if (description.length() > DESCRIPTION_LEN) {
+            description = description.substring(0, DESCRIPTION_LEN);
+        }
     }
 }
