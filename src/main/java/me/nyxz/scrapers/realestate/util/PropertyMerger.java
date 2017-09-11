@@ -24,6 +24,7 @@ public class PropertyMerger {
     private PropertyMerger(Property base, Property diff) {
         this.base = base;
         this.diff = diff;
+        merge.setId(mergedAsset(Property::getId));
         merge.setType(mergedAsset(Property::getType));
         merge.setNeighbourhood(mergedAsset(Property::getNeighbourhood));
         merge.setPriceText(mergedAsset(Property::getPriceText));
