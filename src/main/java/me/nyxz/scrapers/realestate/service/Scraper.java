@@ -31,11 +31,38 @@ public class Scraper {
     private PropertyRepository propertyRepository;
 
     public void run(ScraperConfig config) throws IOException, InterruptedException {
+        final List<Property> listSelectorProperties = getPropertiesFromList(config);
+
+        listSelectorProperties.stream()
+                .map(Property::toString)
+                .forEach(LOG::info);
+
+        final List<Property> fullProperties = getFullProperties(config, listSelectorProperties);
+
+        fullProperties.stream().map(Property::toString).forEach(LOG::info);
+    }
+
+    private List<Property> getFullProperties(ScraperConfig config,
+            List<Property> listSelectorProperties) throws InterruptedException, IOException {
+        final List<Property> fullProperties = new ArrayList<>();
+        for (Property property : listSelectorProperties) {
+            Thread.sleep(WAIT_TIME);
+            LOG.info("Processing property: " + property.getUrl());
+            Document document = Jsoup.connect(property.getUrl()).timeout(TIMEOUT).get();
+            PropertyBuilder propertyBuilder =
+                    PropertyBuilder.init(config.getAssetsSelector().getSelectorConfig());
+            Property mainProperty = propertyBuilder.fromElement(document);
+            Property mergedProperty = PropertyMerger.merge(property, mainProperty);
+            fullProperties.add(mergedProperty);
+        }
+        return fullProperties;
+    }
+
+    private List<Property> getPropertiesFromList(ScraperConfig config)
+            throws InterruptedException, IOException {
         final String propertyBoxSelector = config.getAssetsSelector().getBox();
         final PropertyBuilder listPropertyBuilder = getListPropertyBuilder(config);
-
         final List<Property> listSelectorProperties = new ArrayList<>();
-
         for (int num = 1; num <= 20; num++) {
             Thread.sleep(WAIT_TIME);
             final String pagedQuery = toPageQuery(config, num);
@@ -50,24 +77,7 @@ public class Scraper {
                     .collect(Collectors.toList());
             listSelectorProperties.addAll(pageList);
         }
-
-        listSelectorProperties.stream()
-                .map(Property::toString)
-                .forEach(LOG::info);
-
-        final List<Property> fullProperties = new ArrayList<>();
-        for (Property property : listSelectorProperties) {
-            Thread.sleep(WAIT_TIME);
-            LOG.info("Processing property: " + property.getUrl());
-            Document document = Jsoup.connect(property.getUrl()).timeout(TIMEOUT).get();
-            PropertyBuilder propertyBuilder =
-                    PropertyBuilder.init(config.getAssetsSelector().getSelectorConfig());
-            Property mainProperty = propertyBuilder.fromElement(document);
-            Property mergedProperty = PropertyMerger.merge(property, mainProperty);
-            fullProperties.add(mergedProperty);
-        }
-
-        fullProperties.stream().map(Property::toString).forEach(LOG::info);
+        return listSelectorProperties;
     }
 
     private PropertyBuilder getListPropertyBuilder(ScraperConfig config) {
