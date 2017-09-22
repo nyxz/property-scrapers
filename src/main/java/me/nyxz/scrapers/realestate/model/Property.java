@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Lob;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -14,7 +15,8 @@ import java.util.Date;
 import java.util.Optional;
 
 @Entity
-@Table(name = "property", schema = "realestate")
+@Table(name = "property", schema = "realestate",
+        indexes = {@Index(name = "url_index", columnList = "url")})
 public class Property {
 
     public static final String CURRENCY = "EUR";
@@ -43,7 +45,7 @@ public class Property {
     @Column(name = "size")
     private String size;
 
-    @Column(name = "url", length = 2_083)
+    @Column(name = "url", length = 2_083, unique = true)
     private String url;
 
     @Column(name = "date_created")
@@ -166,6 +168,51 @@ public class Property {
                 getDescription(),
                 toIsoDateString(getDateCreated()),
                 toIsoDateString(getDateModified()));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Property property = (Property) o;
+
+        if (getType() != null ? !getType().equals(property.getType()) :
+                property.getType() != null) {
+            return false;
+        }
+        if (getNeighbourhood() != null ? !getNeighbourhood().equals(property.getNeighbourhood()) :
+                property.getNeighbourhood() != null) {
+            return false;
+        }
+        if (getPriceText() != null ? !getPriceText().equals(property.getPriceText()) :
+                property.getPriceText() != null) {
+            return false;
+        }
+        if (getDescription() != null ? !getDescription().equals(property.getDescription()) :
+                property.getDescription() != null) {
+            return false;
+        }
+        if (getSize() != null ? !getSize().equals(property.getSize()) :
+                property.getSize() != null) {
+            return false;
+        }
+        return getUrl().equals(property.getUrl());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getType() != null ? getType().hashCode() : 0;
+        result = 31 * result + (getNeighbourhood() != null ? getNeighbourhood().hashCode() : 0);
+        result = 31 * result + (getPriceText() != null ? getPriceText().hashCode() : 0);
+        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
+        result = 31 * result + (getSize() != null ? getSize().hashCode() : 0);
+        result = 31 * result + getUrl().hashCode();
+        return result;
     }
 
     private String toIsoDateString(Date date) {

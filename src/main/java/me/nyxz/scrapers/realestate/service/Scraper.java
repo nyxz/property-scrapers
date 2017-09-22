@@ -3,7 +3,6 @@ package me.nyxz.scrapers.realestate.service;
 import me.nyxz.scrapers.realestate.dto.ScraperConfig;
 import me.nyxz.scrapers.realestate.dto.SelectorConfig;
 import me.nyxz.scrapers.realestate.model.Property;
-import me.nyxz.scrapers.realestate.repo.PropertyRepository;
 import me.nyxz.scrapers.realestate.util.PropertyBuilder;
 import me.nyxz.scrapers.realestate.util.PropertyMerger;
 import org.jsoup.Jsoup;
@@ -28,18 +27,13 @@ public class Scraper {
     private static final long WAIT_TIME = 500;
 
     @Autowired
-    private PropertyRepository propertyRepository;
+    private PropertyService propertyService;
 
     public void run(ScraperConfig config) throws IOException, InterruptedException {
         final List<Property> listSelectorProperties = getPropertiesFromList(config);
-
-        listSelectorProperties.stream()
-                .map(Property::toString)
-                .forEach(LOG::info);
-
         final List<Property> fullProperties = getFullProperties(config, listSelectorProperties);
 
-        fullProperties.stream().map(Property::toString).forEach(LOG::info);
+        fullProperties.stream().forEach(propertyService::createOrUpdate);
     }
 
     private List<Property> getFullProperties(ScraperConfig config,
