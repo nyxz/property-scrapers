@@ -33,7 +33,7 @@ public class Scraper {
         final List<Property> listSelectorProperties = getPropertiesFromList(config);
         final List<Property> fullProperties = getFullProperties(config, listSelectorProperties);
 
-        fullProperties.stream().forEach(propertyService::createOrUpdate);
+        fullProperties.forEach(propertyService::createOrUpdate);
     }
 
     private List<Property> getFullProperties(ScraperConfig config,
