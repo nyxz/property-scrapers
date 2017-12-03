@@ -16,4 +16,3 @@ selectorConfig:
   description:
   currency:
   size: .estate-description > span
-  url:

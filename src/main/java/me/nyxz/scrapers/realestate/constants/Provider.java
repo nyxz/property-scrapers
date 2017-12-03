@@ -3,7 +3,8 @@ package me.nyxz.scrapers.realestate.constants;
 import java.util.Optional;
 
 public enum Provider {
-    IMOTEKA("imoteka.bg");
+    IMOTEKA("imoteka.bg"),
+    IMOT_BG("imot.bg");
 
     public static final String CONFIG_EXTENSION = "yml";
     public static final String CONFIG_DIR = "scraper";
