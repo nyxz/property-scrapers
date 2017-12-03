@@ -27,10 +27,11 @@ public class PropertyMerger {
         merge.setId(mergedAsset(Property::getId));
         merge.setType(mergedAsset(Property::getType));
         merge.setNeighbourhood(mergedAsset(Property::getNeighbourhood));
-        merge.setPriceText(mergedAsset(Property::getPriceText));
+        merge.setRawPrice(mergedAsset(Property::getRawPrice));
         merge.setPrice(mergedAsset(Property::getPrice));
         merge.setDescription(mergedAsset(Property::getDescription));
         merge.setSize(mergedAsset(Property::getSize));
+        merge.setRawSize(mergedAsset(Property::getRawSize));
         merge.setUrl(mergedAsset(Property::getUrl));
     }
 

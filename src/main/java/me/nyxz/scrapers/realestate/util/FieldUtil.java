@@ -33,6 +33,10 @@ public class FieldUtil {
         return getAttrValue(element, aTagSelector, "href");
     }
 
+    public static Long toSize(String sizeStr) {
+        return Long.valueOf(sizeStr.replaceAll("[^0-9]", ""));
+    }
+
     public static Long toPrice(String priceStr) {
         int indexOfFirstCurrency = priceStr.trim().indexOf(Property.CURRENCY);
         return Long.valueOf(priceStr.substring(0, indexOfFirstCurrency).replace(" ", ""));

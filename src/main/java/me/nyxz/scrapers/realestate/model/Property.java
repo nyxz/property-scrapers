@@ -6,7 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
-import javax.persistence.Lob;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -35,15 +34,17 @@ public class Property {
     @Column(name = "price")
     private Long price;
 
-    @Column(name = "price_txt")
-    private String priceText;
+    @Column(name = "raw_price")
+    private String rawPrice;
 
     @Column(name = "description", length = DESCRIPTION_LEN)
-    @Lob
     private String description;
 
     @Column(name = "size")
-    private String size;
+    private Long size;
+
+    @Column(name = "raw_size")
+    private String rawSize;
 
     @Column(name = "url", length = 2_083, unique = true)
     private String url;
@@ -103,12 +104,12 @@ public class Property {
         return this;
     }
 
-    public String getPriceText() {
-        return priceText;
+    public String getRawPrice() {
+        return rawPrice;
     }
 
-    public Property setPriceText(String priceText) {
-        this.priceText = priceText;
+    public Property setRawPrice(String rawPrice) {
+        this.rawPrice = rawPrice;
         return this;
     }
 
@@ -121,12 +122,21 @@ public class Property {
         return this;
     }
 
-    public String getSize() {
+    public Long getSize() {
         return size;
     }
 
-    public Property setSize(String size) {
+    public Property setSize(Long size) {
         this.size = size;
+        return this;
+    }
+
+    public String getRawSize() {
+        return rawSize;
+    }
+
+    public Property setRawSize(String rawSize) {
+        this.rawSize = rawSize;
         return this;
     }
 
@@ -157,13 +167,14 @@ public class Property {
 
     @Override
     public String toString() {
-        return String.format("%-30s | %-16s | %-20s | %-8d%s | %-24s | %s | %s | %s | %s ",
+        return String.format("%-30s | %-16s | %-16s | %-20s | %-8d%s | %-24s | %s | %s | %s | %s ",
                 getType(),
                 getSize(),
+                getRawSize(),
                 getNeighbourhood(),
                 getPrice(),
                 CURRENCY,
-                getPriceText(),
+                getRawPrice(),
                 getUrl(),
                 getDescription(),
                 toIsoDateString(getDateCreated()),
@@ -189,8 +200,8 @@ public class Property {
                 property.getNeighbourhood() != null) {
             return false;
         }
-        if (getPriceText() != null ? !getPriceText().equals(property.getPriceText()) :
-                property.getPriceText() != null) {
+        if (getRawPrice() != null ? !getRawPrice().equals(property.getRawPrice()) :
+                property.getRawPrice() != null) {
             return false;
         }
         if (getDescription() != null ? !getDescription().equals(property.getDescription()) :
@@ -208,7 +219,7 @@ public class Property {
     public int hashCode() {
         int result = getType() != null ? getType().hashCode() : 0;
         result = 31 * result + (getNeighbourhood() != null ? getNeighbourhood().hashCode() : 0);
-        result = 31 * result + (getPriceText() != null ? getPriceText().hashCode() : 0);
+        result = 31 * result + (getRawPrice() != null ? getRawPrice().hashCode() : 0);
         result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
         result = 31 * result + (getSize() != null ? getSize().hashCode() : 0);
         result = 31 * result + getUrl().hashCode();

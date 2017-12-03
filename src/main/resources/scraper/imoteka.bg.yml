@@ -1,4 +1,5 @@
 box: .property_holder
+boxPerPage: 15
 pageQueryParam: page
 listSelectorConfig:
   type: h3 > a.nodecoration > strong

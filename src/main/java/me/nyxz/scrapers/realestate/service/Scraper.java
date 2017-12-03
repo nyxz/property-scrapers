@@ -57,20 +57,26 @@ public class Scraper {
         final String propertyBoxSelector = config.getAssetsSelector().getBox();
         final PropertyBuilder listPropertyBuilder = getListPropertyBuilder(config);
         final List<Property> listSelectorProperties = new ArrayList<>();
-        for (int num = 1; num <= 20; num++) {
+        boolean hasNextPage = true;
+        int pageNum = 1;
+        do {
             Thread.sleep(WAIT_TIME);
-            final String pagedQuery = toPageQuery(config, num);
+            final String pagedQuery = toPageQuery(config, pageNum++);
             LOG.info("Querying: " + pagedQuery);
             final Document document = Jsoup.connect(pagedQuery).timeout(TIMEOUT).get();
             final Elements elements = document.select(propertyBoxSelector);
             if (elements.isEmpty()) {
                 break;
             }
+            if (elements.size() < config.getAssetsSelector().getBoxPerPage()) {
+                hasNextPage = false;
+            }
             final List<Property> pageList = elements.stream()
                     .map(listPropertyBuilder::fromElement)
                     .collect(Collectors.toList());
             listSelectorProperties.addAll(pageList);
-        }
+        } while (hasNextPage);
+
         return listSelectorProperties;
     }
 

@@ -3,6 +3,7 @@ package me.nyxz.scrapers.realestate.dto;
 public class PropertyAssetsSelector {
 
     private String box;
+    private int boxPerPage;
     private String pageQueryParam;
     private SelectorConfig listSelectorConfig;
     private SelectorConfig selectorConfig;
@@ -21,6 +22,15 @@ public class PropertyAssetsSelector {
 
     public PropertyAssetsSelector setBox(String box) {
         this.box = box;
+        return this;
+    }
+
+    public int getBoxPerPage() {
+        return boxPerPage;
+    }
+
+    public PropertyAssetsSelector setBoxPerPage(int boxPerPage) {
+        this.boxPerPage = boxPerPage;
         return this;
     }
 

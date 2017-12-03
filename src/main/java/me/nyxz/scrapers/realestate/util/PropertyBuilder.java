@@ -20,14 +20,21 @@ public class PropertyBuilder {
     }
 
     public Property fromElement(Element el) {
+        final String rawPrice = FieldUtil.by(el, selectorConfig.getPrice());
+        final String rawSize = FieldUtil.by(el, selectorConfig.getSize());
         return new Property()
                 .setType(FieldUtil.by(el, selectorConfig.getType()))
                 .setNeighbourhood(FieldUtil.by(el, selectorConfig.getNeighbourhood()))
-                .setPriceText(FieldUtil.by(el, selectorConfig.getPrice()))
-                .setPrice(toPrice(FieldUtil.by(el, selectorConfig.getPrice())))
-                .setSize(FieldUtil.by(el, selectorConfig.getSize()))
+                .setRawPrice(rawPrice)
+                .setPrice(toPrice(rawPrice))
+                .setSize(toSize(rawSize))
+                .setRawSize(rawSize)
                 .setDescription(FieldUtil.by(el, selectorConfig.getDescription()))
                 .setUrl(escapeUrl(FieldUtil.getHrefValue(el, selectorConfig.getUrl())));
+    }
+
+    private Long toSize(String sizeStr) {
+        return StringUtils.isEmpty(sizeStr) ? null : FieldUtil.toSize(sizeStr);
     }
 
     private Long toPrice(String priceStr) {

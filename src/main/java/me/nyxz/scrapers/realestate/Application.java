@@ -14,23 +14,25 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.FileSystemResource;
 
+import java.io.UnsupportedEncodingException;
+
 @SpringBootApplication
 public class Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnsupportedEncodingException {
         SpringApplication.run(Application.class, args);
     }
 
     @Bean
     public CommandLineRunner run(ScraperConfigService configService, Scraper scraper) {
-        return (args) -> {
+        return (String... args) -> {
             if (args.length != 1) {
                 LOG.error("The programs takes exactly 1 argument - the query.");
                 return;
             }
-            String queryUrl = args[0];
+            final String queryUrl = args[0];
             ScraperConfig config = configService.getConfigByQuery(queryUrl);
             scraper.run(config);
         };
