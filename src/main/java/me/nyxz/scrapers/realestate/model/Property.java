@@ -234,7 +234,7 @@ public class Property {
     }
 
     private void ensureDescriptionLenght() {
-        if (description.length() > DESCRIPTION_LEN) {
+        if (description != null && description.length() > DESCRIPTION_LEN) {
             description = description.substring(0, DESCRIPTION_LEN);
         }
     }
